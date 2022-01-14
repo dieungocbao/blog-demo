@@ -6,6 +6,8 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 
+import routes from './routes'
+
 // middlewares
 const app = express()
 app.use(express.json())
@@ -14,15 +16,12 @@ app.use(cors())
 app.use(morgan('dev'))
 app.use(cookieParser())
 
-
 // Routes
-app.get('/', (req,res) => {
-  res.json({msg: "Hello world"})
-})
+app.use('/api', routes.authRouter)
 
 // databse connection
 import './config/database'
 
 // server listening
 const PORT = process.env.PORT || 5000
-app.listen(PORT, () => console.log('Serving is running on port ', PORT))
+app.listen(PORT, () => console.log('Serving is running on port', PORT))
