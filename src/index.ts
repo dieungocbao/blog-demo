@@ -14,10 +14,14 @@ app.use(cors())
 app.use(morgan('dev'))
 app.use(cookieParser())
 
+
 // Routes
 app.get('/', (req,res) => {
   res.json({msg: "Hello world"})
 })
+
+// databse connection
+import './config/database'
 
 // server listening
 const PORT = process.env.PORT || 5000
