@@ -1,8 +1,10 @@
 import { Request, Response } from 'express'
 import Users from '../models/userModel'
 import argon2 from 'argon2'
-import jwt from 'jsonwebtoken'
 import { generateActiveToken } from '../config/generateToken'
+import { validateEmail } from '../middlewares/valid'
+import sendMail from '../config/sendMail'
+import { CLIENT_URL } from '../constants'
 
 const authController = {
   register: async (req: Request, res: Response) => {
@@ -18,12 +20,12 @@ const authController = {
 
       const active_token = generateActiveToken({ newUser })
 
-      res.json({
-        status: 'OK',
-        msg: 'Register successfully.',
-        data: newUser,
-        active_token,
-      })
+      const url = `${CLIENT_URL}/active/${active_token}`
+
+      if (validateEmail(account)) {
+        sendMail(account, url, 'Verify your email address')
+        return res.json({ msg: 'Success! Please check your email.' })
+      }
     } catch (err) {
       if (err instanceof Error) {
         return res.status(500).json({ msg: err.message })
