@@ -1,7 +1,12 @@
 import mongoose from 'mongoose'
+import { v4 as uuidv4 } from 'uuid';
 
 const userSchema = new mongoose.Schema(
   {
+    _id: {
+      type: String,
+      default: uuidv4
+    },
     name: {
       type: String,
       required: [true, 'Please add your name'],
@@ -17,7 +22,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Please add your password'],
-      trim: true,
+      minlength: [6, 'Password must be at least 6 chars.']
     },
     avatar: {
       type: String,
@@ -31,6 +36,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       defaul: 'normal', // fast
     },
+    isActive: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     timestamps: true,

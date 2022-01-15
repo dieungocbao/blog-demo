@@ -1,3 +1,4 @@
 const CLIENT_URL = process.env.BASE_URL
+const ACTIVE_TOKEN_SECRET = process.env.ACTIVE_TOKEN_SECRET
 
-export { CLIENT_URL }
+export { CLIENT_URL, ACTIVE_TOKEN_SECRET }

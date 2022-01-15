@@ -1,9 +1,11 @@
 import express from 'express'
-import authCtrl from '../controllers/auth.controller'
+import authController from '../controllers/auth.controller'
 import { validRegister } from '../middlewares/valid'
 
 const router = express.Router()
 
-router.post('/register', validRegister, authCtrl.register)
+router.post('/register', validRegister, authController.register)
+router.post('/active', authController.activeAccount)
+router.post('/resend-active', authController.sendActiveEmail)
 
 export default router
