@@ -8,5 +8,6 @@ router.post('/register', validRegister, authController.register)
 router.post('/active', authController.activeAccount)
 router.post('/resend-active', authController.sendActiveEmail)
 router.post('/login', authController.login)
+router.get('/logout', authController.logout)
 
 export default router
