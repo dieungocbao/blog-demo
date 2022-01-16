@@ -21,9 +21,9 @@ const authController = {
       const newUser = new Users({ name, account, password: passwordHash })
       await newUser.save()
 
-      const active_token = generateActiveToken({ name, account })
+      const activeToken = generateActiveToken({ name, account })
 
-      const url = `${CLIENT_URL}/active/${active_token}`
+      const url = `${CLIENT_URL}/active/${activeToken}`
 
       if (validateEmail(account)) {
         sendMail(account, url, 'Verify your email address')
@@ -37,8 +37,8 @@ const authController = {
   },
   activeAccount: async (req: Request, res: Response) => {
     try {
-      const { active_token } = req.body
-      const { account } = <ITokenDecoded>jwt.verify(active_token, `${ACTIVE_TOKEN_SECRET}`)
+      const { activeToken } = req.body
+      const { account } = <ITokenDecoded>jwt.verify(activeToken, `${ACTIVE_TOKEN_SECRET}`)
       if (!account) {
         return res.status(400).json({ msg: 'Invalid authentication.' })
       }
@@ -53,8 +53,8 @@ const authController = {
   sendActiveEmail: async (req: Request, res: Response) => {
     try {
       const { account } = req.body
-      const active_token = generateActiveToken({ account })
-      const url = `${CLIENT_URL}/active/${active_token}`
+      const activeToken = generateActiveToken({ account })
+      const url = `${CLIENT_URL}/active/${activeToken}`
       if (validateEmail(account)) {
         sendMail(account, url, 'Verify your email address')
         return res.json({ msg: 'Success! Please check your email.' })
@@ -91,14 +91,14 @@ const authController = {
   },
   refreshToken: async (req: Request, res: Response) => {
     try {
-      const refreshToken = req.cookies['refresh_token']
+      const refreshToken = req.cookies.refresh_token
       if (!refreshToken) return res.status(400).json({ msg: 'Please login now!' })
       const { _id } = <ITokenDecoded>jwt.verify(refreshToken, `${REFRESH_TOKEN_SECRET}`)
       if (!_id) return res.status(400).json({ msg: 'Please login now!' })
       const user = await Users.findById({ _id }).select('-password')
       if (!user) return res.status(400).json({ msg: 'This account does not exist.' })
-      const access_token = generateAccessToken({ _id: user._id })
-      return res.json({ access_token })
+      const accessToken = generateAccessToken({ _id: user._id })
+      return res.json({ accessToken })
     } catch (err) {
       if (err instanceof Error) {
         return res.status(500).json({ msg: err.message })
@@ -111,14 +111,14 @@ const loginUser = async (user: IUser, password: string, res: Response) => {
   const isMatch = await argon2.verify(user.password, password)
   if (!isMatch) return res.status(500).json({ msg: 'Password is incorrect.' })
 
-  const access_token = generateAccessToken({ _id: user._id })
-  const refresh_token = generateRefreshToken({ _id: user._id })
-  res.cookie('refresh_token', refresh_token, {
+  const accessToken = generateAccessToken({ _id: user._id })
+  const refreshToken = generateRefreshToken({ _id: user._id })
+  res.cookie('refresh_token', refreshToken, {
     httpOnly: true,
     path: '/api/refresh_token',
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   })
-  return res.json({ msg: 'Login Success!', access_token })
+  return res.json({ msg: 'Login Success!', accessToken })
 }
 
 export default authController

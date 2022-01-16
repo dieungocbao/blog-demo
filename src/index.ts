@@ -1,12 +1,13 @@
-import dotenv from 'dotenv'
-dotenv.config()
-
-import express from 'express'
-import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import express from 'express'
 import morgan from 'morgan'
-
+// databse connection
+import './config/database'
 import routes from './routes'
+
+dotenv.config()
 
 // middlewares
 const app = express()
@@ -18,9 +19,6 @@ app.use(cookieParser())
 
 // Routes
 app.use('/api', routes.authRouter)
-
-// databse connection
-import './config/database'
 
 // server listening
 const PORT = process.env.PORT || 5000
