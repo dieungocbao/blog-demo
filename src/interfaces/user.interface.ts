@@ -15,9 +15,10 @@ export interface INewUser {
   password: string
 }
 
-export interface IToken {
-  name: string
-  account: string
+export interface ITokenDecoded {
+  _id?: string
+  name?: string
+  account?: string
   iat: number
   exp: number
 }

@@ -9,5 +9,6 @@ router.post('/active', authController.activeAccount)
 router.post('/resend-active', authController.sendActiveEmail)
 router.post('/login', authController.login)
 router.get('/logout', authController.logout)
+router.get('/refresh_token', authController.refreshToken)
 
 export default router

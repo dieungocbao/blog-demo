@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      defaul: 'normal', // fast
+      default: 'register', // login
     },
     isActive: {
       type: Boolean,
